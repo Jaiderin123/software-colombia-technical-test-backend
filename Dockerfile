@@ -1,29 +1,22 @@
-# --- Stage 1: Build Stage ---
-# Use the official Gradle image with Java 21 to compile the project
-FROM gradle:8.14.4-jdk21-alpine AS build
+# --- Stage 1: Build ---
+FROM gradle:8.14-jdk21-alpine AS build
 WORKDIR /app
 
-# Copy Gradle configuration files to leverage Docker layer caching
-COPY gradlew .
-COPY gradle gradle
+# Copy dependency files first to leverage Docker layer caching
 COPY build.gradle settings.gradle ./
+COPY gradle gradle
+COPY gradlew .
+RUN ./gradlew dependencies --no-daemon || true
 
-# Copy the application source code
+# Copy source code and build the executable jar
 COPY src ./src
+RUN ./gradlew bootJar -x test --no-daemon
 
-# Build the application generating the .jar file (skipping tests for a faster build)
-RUN ./gradlew bootJar -x test
-
-# --- Stage 2: Run Stage ---
-# Use a lightweight Eclipse Temurin Java 21 JRE image for production execution
+# --- Stage 2: Run ---
 FROM eclipse-temurin:21-jre-alpine
 WORKDIR /app
 
-# Copy the compiled .jar file from the build stage
+# Copy the compiled jar from the build stage
 COPY --from=build /app/build/libs/*.jar app.jar
-
-# Expose the default Spring Boot port
 EXPOSE 8080
-
-# Command to execute the reactive application
 ENTRYPOINT ["java", "-jar", "app.jar"]

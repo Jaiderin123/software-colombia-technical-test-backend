@@ -1,4 +1,5 @@
 services:
+
   # --- Database Service (PostgreSQL) ---
   postgres-db:
     image: postgres:16-alpine
@@ -10,15 +11,31 @@ services:
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: password123
     volumes:
-      # Mounts the initial SQL script into the auto-execution directory of Postgres
       - ./local-env/postgres/init.sql:/docker-entrypoint-initdb.d/init.sql
-      # Named volume to ensure data persistence across container restarts
-      #- postgres_data:/var/lib/postgresql/data
     healthcheck:
       test: ["CMD-SHELL", "pg_isready -U postgres -d project_manager_db"]
       interval: 5s
       timeout: 5s
       retries: 5
+
+  # --- Backend Service (Spring Boot) ---
+  backend:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: software-colombia-backend
+    ports:
+      - "8080:8080"
+    environment:
+      DATABASE_ENDPOINT: postgres-db:5432
+      DATABASE_NAME: project_manager_db
+      DATABASE_USERNAME: postgres
+      DATABASE_PASSWORD: password123
+      JWT_SECRET: "CR0zMxXVfqMzeCsQJcEnJjhkphcScyueBh3b8Eq6l6S"
+      APP_BASE_PATH: "/api/v1"
+    depends_on:
+      postgres-db:
+        condition: service_healthy
 
 volumes:
   postgres_data:

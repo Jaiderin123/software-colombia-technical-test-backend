@@ -39,7 +39,6 @@ INSERT INTO users (email, password, full_name) VALUES
                                                    ('andres.pm@software-colombia.com', '$2a$10$0OAsZdEDXSzzqeydlGFiXOeyGArlYC3169cg0TZlW4l0d/Ncl2tWG', 'Andres Project Manager'),
                                                    ('sofia.design@software-colombia.com', '$2a$10$0OAsZdEDXSzzqeydlGFiXOeyGArlYC3169cg0TZlW4l0d/Ncl2tWG', 'Sofia UI/UX');
 
--- Creation of the EXACTLY 2 required Workspaces
 INSERT INTO workspaces (name) VALUES ('Workspace Alfa');
 INSERT INTO workspaces (name) VALUES ('Workspace Beta');
 
