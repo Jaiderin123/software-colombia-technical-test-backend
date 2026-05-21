@@ -1,0 +1,24 @@
+services:
+  # --- Database Service (PostgreSQL) ---
+  postgres-db:
+    image: postgres:16-alpine
+    container_name: software-colombia-db
+    ports:
+      - "5432:5432"
+    environment:
+      POSTGRES_DB: project_manager_db
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: password123
+    volumes:
+      # Mounts the initial SQL script into the auto-execution directory of Postgres
+      - ./local-env/postgres/init.sql:/docker-entrypoint-initdb.d/init.sql
+      # Named volume to ensure data persistence across container restarts
+      #- postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres -d project_manager_db"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+volumes:
+  postgres_data:
