@@ -118,12 +118,12 @@ public class JwtUtil implements JwtProvider {
 
         public String toMessage() {
             return switch (this) {
-                case VALID             -> "Token válido";
-                case EXPIRED           -> "El token ha expirado";
-                case INVALID_SIGNATURE -> "Firma del token inválida";
-                case MALFORMED         -> "Token malformado";
-                case MISSING           -> "Token no proporcionado";
-                case INVALID           -> "Token inválido";
+                case VALID             -> "Token valid";
+                case EXPIRED           -> "Token expired";
+                case INVALID_SIGNATURE -> "Token signature invalid";
+                case MALFORMED         -> "Token malformed";
+                case MISSING           -> "Token empty";
+                case INVALID           -> "Token invalid";
             };
         }
     }

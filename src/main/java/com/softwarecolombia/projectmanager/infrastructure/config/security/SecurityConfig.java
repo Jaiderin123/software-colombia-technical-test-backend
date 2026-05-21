@@ -41,8 +41,8 @@ public class SecurityConfig {
                         //with pre-auth token
                         .pathMatchers(POST, baseUrl + "/auth/token").authenticated()
 
-                        .pathMatchers(GET, baseUrl + "/projects/**").authenticated()
-                        .pathMatchers(POST, baseUrl + "/projects/**").hasAnyAuthority("ROLE_ADMIN", "ROLE_EDITOR")
+                        .pathMatchers(GET, baseUrl + "/project/**").authenticated()
+                        .pathMatchers(POST, baseUrl + "/project/**").hasAnyAuthority("ROLE_ADMIN", "ROLE_EDITOR")
 
                         //show errors
                         .pathMatchers("/error").permitAll()

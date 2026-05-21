@@ -1,13 +1,12 @@
-package com.softwarecolombia.projectmanager.application.usecase;
+package com.softwarecolombia.projectmanager.application.usecase.auth;
 
 import com.softwarecolombia.projectmanager.domain.security.ports.out.JwtProvider;
 import com.softwarecolombia.projectmanager.domain.shared.exceptions.BusinessException;
 import com.softwarecolombia.projectmanager.domain.user.model.AppUserWithWorkspaceAndRole;
 import com.softwarecolombia.projectmanager.domain.shared.exceptions.ports.IPasswordEncoderPort;
 import com.softwarecolombia.projectmanager.domain.user.ports.in.LoginAppUserUseCase;
-import com.softwarecolombia.projectmanager.domain.user.ports.out.UserRepository;
-import com.softwarecolombia.projectmanager.domain.workspace.ports.out.IWorkspaceRepository;
-import com.softwarecolombia.projectmanager.infrastructure.adapters.persistence.workspace.WorkspaceAdapter;
+import com.softwarecolombia.projectmanager.domain.user.ports.out.AppUserRepository;
+import com.softwarecolombia.projectmanager.domain.workspace.ports.out.WorkspaceRepository;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 import reactor.core.publisher.Mono;
@@ -15,14 +14,14 @@ import reactor.core.publisher.Mono;
 @Service
 @AllArgsConstructor
 public class LoginAppUserService implements LoginAppUserUseCase {
-    private final UserRepository userRepository;
+    private final AppUserRepository appUserRepository;
     private final IPasswordEncoderPort passwordEncoderPort;
-    private final IWorkspaceRepository workspaceRepository;
+    private final WorkspaceRepository workspaceRepository;
     private final JwtProvider jwtProvider;
 
     @Override
     public Mono<AppUserWithWorkspaceAndRole> loginAppUser(String email, String password) {
-        return userRepository.findByEmail(email)
+        return appUserRepository.findByEmail(email)
                 .switchIfEmpty(Mono.error(new BusinessException("User don't exits")))
                 .flatMap(userApp ->
                     passwordEncoderPort.matches(password, userApp.password())

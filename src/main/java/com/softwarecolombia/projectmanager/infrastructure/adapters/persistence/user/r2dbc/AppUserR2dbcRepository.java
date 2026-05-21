@@ -4,6 +4,6 @@ import com.softwarecolombia.projectmanager.infrastructure.adapters.persistence.u
 import org.springframework.data.r2dbc.repository.R2dbcRepository;
 import reactor.core.publisher.Mono;
 
-public interface UserR2dbcRepository extends R2dbcRepository<UserEntity, Long> {
+public interface AppUserR2dbcRepository extends R2dbcRepository<UserEntity, Long> {
     Mono<UserEntity> findByEmail(String email);
 }
