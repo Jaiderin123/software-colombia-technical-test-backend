@@ -1,3 +1,23 @@
 spring:
   application:
     name: software-colombia-technical-test
+    base-path: ${APP_BASE_PATH}
+  jackson:
+    serialization:
+      write-dates-as-timestamps: false
+
+  r2dbc:
+    url: r2dbc:postgresql://${DATABASE_ENDPOINT}/${DATABASE_NAME}
+    username: ${DATABASE_USERNAME}
+    password: ${DATABASE_PASSWORD}
+
+security:
+  jwt:
+    secret: "CR0zMxXVfqMzeCsQJcEnJjhkphcScyueBh3b8Eq6l6S"
+  public-paths:
+    - ${APP_BASE_PATH}/auth/login
+
+#logging:
+#  level:
+#    org.springframework.security: TRACE
+#    org.springframework.web.reactive: DEBUG
