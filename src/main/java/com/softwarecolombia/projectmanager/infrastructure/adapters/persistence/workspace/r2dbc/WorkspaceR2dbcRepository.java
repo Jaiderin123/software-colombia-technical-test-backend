@@ -23,4 +23,11 @@ public interface WorkspaceR2dbcRepository extends R2dbcRepository<WorkspaceEntit
         WHERE wu.user_id = :userId AND w.id = :workspaceId
     """)
     Mono<String> findWorkspaceUserRoleByUserIdAndWorkspaceId(Long userId, Long workspaceId);
+
+    @Query("""
+        SELECT COUNT(*)
+        FROM workspace_users wu
+        WHERE wu.user_id = :userId AND wu.workspace_id = :workspaceId
+    """)
+    Mono<Integer> appUserIsInWorkspace(Long userId, Long workspaceId);
 }

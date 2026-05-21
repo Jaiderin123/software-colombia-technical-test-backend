@@ -1,10 +1,10 @@
-package com.softwarecolombia.projectmanager.application.usecase;
+package com.softwarecolombia.projectmanager.application.usecase.auth;
 
 import com.softwarecolombia.projectmanager.domain.security.ports.out.JwtProvider;
 import com.softwarecolombia.projectmanager.domain.shared.exceptions.BusinessException;
 import com.softwarecolombia.projectmanager.domain.user.ports.in.LoginWorkspaceContextUseCase;
-import com.softwarecolombia.projectmanager.domain.user.ports.out.UserRepository;
-import com.softwarecolombia.projectmanager.domain.workspace.ports.out.IWorkspaceRepository;
+import com.softwarecolombia.projectmanager.domain.user.ports.out.AppUserRepository;
+import com.softwarecolombia.projectmanager.domain.workspace.ports.out.WorkspaceRepository;
 import com.softwarecolombia.projectmanager.infrastructure.config.security.AuthPrincipal;
 import lombok.AllArgsConstructor;
 import org.springframework.security.core.context.ReactiveSecurityContextHolder;
@@ -14,8 +14,8 @@ import reactor.core.publisher.Mono;
 @Service
 @AllArgsConstructor
 public class LoginWorkspaceContextService implements LoginWorkspaceContextUseCase {
-    private final UserRepository userRepository;
-    private final IWorkspaceRepository workspaceRepository;
+    private final AppUserRepository appUserRepository;
+    private final WorkspaceRepository workspaceRepository;
     private final JwtProvider jwtProvider;
 
     @Override
@@ -24,7 +24,7 @@ public class LoginWorkspaceContextService implements LoginWorkspaceContextUseCas
                 .map(securityContext -> (AuthPrincipal) securityContext.getAuthentication().getPrincipal())
                 .flatMap(authPrincipal -> {
                     Long userId = authPrincipal.userId();
-                    return userRepository.existsById(userId)
+                    return appUserRepository.existsById(userId)
                             .flatMap(userExists -> {
                                 if (!userExists)
                                     return Mono.error(new BusinessException("User not found"));

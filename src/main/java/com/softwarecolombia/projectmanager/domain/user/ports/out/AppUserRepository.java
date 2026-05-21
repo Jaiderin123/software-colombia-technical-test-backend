@@ -4,9 +4,10 @@ import com.softwarecolombia.projectmanager.domain.user.model.AppUser;
 import org.springframework.stereotype.Repository;
 import reactor.core.publisher.Mono;
 
-@Repository
-public interface UserRepository {
+public interface AppUserRepository {
     Mono<AppUser> findByEmail(String email);
 
     Mono<Boolean> existsById(Long userId);
+
+    Mono<AppUser> findById(Long userId);
 }
