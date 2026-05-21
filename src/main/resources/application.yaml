@@ -13,7 +13,7 @@ spring:
 
 security:
   jwt:
-    secret: "CR0zMxXVfqMzeCsQJcEnJjhkphcScyueBh3b8Eq6l6S"
+    secret: ${JWT_SECRET}
   public-paths:
     - ${APP_BASE_PATH}/auth/login
 
